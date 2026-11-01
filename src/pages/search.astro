@@ -1,0 +1,6 @@
+---
+import Base from '../layouts/Base.astro';
+import Catalog from '../components/Catalog.astro';
+import { products } from '../data/products';
+---
+<Base title="Find your fragrance"><section class="page-intro"><p class="eyebrow">A WORLD TO DISCOVER</p><h1>FIND YOUR FRAGRANCE.</h1><p>A name, a mood, a little inspiration.</p></section><section class="section catalog-section"><Catalog products={products} search /></section></Base>

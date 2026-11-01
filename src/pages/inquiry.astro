@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import { products } from '../data/products';
+---
+<Base title="Make an inquiry"><section class="inquiry-page section"><div class="inquiry-intro"><p class="eyebrow">LET’S TALK FRAGRANCE</p><h1>YOUR NEXT<br />SCENT STORY<br />STARTS HERE.</h1><p>Found a favorite? Share the fragrance, size and quantity you have in mind.</p><Photo name="social-caramel" alt="QUEENS CARAMEL fragrance bottle" /><p class="small-note">Quotes can be requested in US dollars or euros. An inquiry is not an order.</p></div><div class="inquiry-form-wrap"><h2>MAKE AN INQUIRY</h2><div class="form-notice" role="note"><strong>Inquiry delivery is not available yet.</strong><p>You can prepare and download your inquiry below. It stays on your device and will not be sent.</p></div><noscript><p class="form-notice">Enable JavaScript to prepare a local inquiry draft. No inquiry delivery is available.</p></noscript><form id="inquiry-form" method="post"><div class="form-row"><label>First & last name <span>*</span><input name="name" autocomplete="name" required maxlength="120" /></label><label>Email address <span>*</span><input name="email" type="email" autocomplete="email" required maxlength="254" /></label></div><label>Country / region <span>*</span><input name="country" autocomplete="country-name" placeholder="e.g. United States, France" required maxlength="100" /></label><label>Fragrance<select name="product" id="inquiry-product"><option value="">General inquiry</option>{products.map(p => <option value={p.slug} data-sizes={p.sizes.join('|')}>{p.name} — {p.type}</option>)}</select></label><div class="form-row"><label>Preferred size<select name="size" id="inquiry-size"><option value="">Please select a fragrance</option></select></label><label>Quantity <span>*</span><input name="quantity" type="number" min="1" max="100000" step="1" value="1" required /></label></div><label>Preferred quote currency<select name="currency" data-currency><option value="USD">USD — US Dollar</option><option value="EUR">EUR — Euro</option></select></label><label>Your message <span>*</span><textarea name="message" rows="5" required minlength="10" maxlength="3000" placeholder="Tell us about the fragrances you’re interested in and any questions you have."></textarea></label><p class="small-note">No personal information is submitted in this preview. See our <a href="/privacy">privacy notice</a>.</p><button class="button dark" type="submit" disabled data-draft-button>Download inquiry draft <span>↓</span></button><p id="inquiry-status" role="status" aria-live="polite"></p></form></div></section>
+<script>
+import { getCurrency } from '../lib/preferences';
+const form = document.querySelector<HTMLFormElement>('#inquiry-form')!;
+const product = form.elements.namedItem('product') as HTMLSelectElement;
+const size = form.elements.namedItem('size') as HTMLSelectElement;
+const currency = form.elements.namedItem('currency') as HTMLSelectElement;
+const params = new URLSearchParams(location.search);
+form.querySelector<HTMLButtonElement>('[data-draft-button]')!.disabled = false;
+const syncSizes = () => { const sizes = product.selectedOptions[0].dataset.sizes?.split('|') || []; size.replaceChildren(...(sizes.length ? sizes : ['Please select a fragrance']).map(value => new Option(value,sizes.length ? value : ''))); size.disabled = !sizes.length; };
+const requested = params.get('product'); if ([...product.options].some(o => o.value === requested)) product.value = requested!;
+syncSizes(); const requestedSize = params.get('size'); if ([...size.options].some(o => o.value === requestedSize)) size.value = requestedSize!;
+currency.value = getCurrency();
+product.addEventListener('change',syncSizes);
+window.addEventListener('currencychange',() => currency.value = getCurrency());
+form.addEventListener('submit',event => {
+ event.preventDefault(); if (!form.reportValidity()) return;
+ const data = new FormData(form);
+ const lines = ['FRAGRANCE INQUIRY DRAFT — NOT SENT', '', ...['name','email','country','quantity','currency','message'].map(key => `${key.toUpperCase()}: ${String(data.get(key) || '')}`), `FRAGRANCE: ${product.selectedOptions[0].text}`, `SIZE: ${size.value || 'Not specified'}`, '', 'This draft has not been sent and does not create an order.'];
+ const blob = new Blob([lines.join('\n')],{type:'text/plain;charset=utf-8'}); const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = 'fragrance-inquiry.txt'; link.click(); setTimeout(() => URL.revokeObjectURL(url),1000);
+ document.querySelector('#inquiry-status')!.textContent = 'Your inquiry draft has been prepared for download. Nothing has been sent.';
+});
+</script>
+</Base>

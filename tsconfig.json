@@ -1,0 +1,1 @@
+{"extends":"astro/tsconfigs/strict","include":[".astro/types.d.ts","**/*"],"exclude":["dist","原html","原网站图片"]}

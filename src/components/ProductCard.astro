@@ -1,0 +1,11 @@
+---
+import Photo from './Photo.astro';
+import type { Product } from '../data/products';
+interface Props { product: Product; }
+const {product: p} = Astro.props;
+---
+<article class="product-card" data-product data-name={p.name} data-mood={p.mood} data-sizes={p.sizes.join('|')} data-search={`${p.name} ${p.type} ${p.mood}`.toLowerCase()}>
+  <a class="product-photo" href={`/products/${p.slug}`} aria-label={`Explore ${p.name}`}><Photo name={p.image} alt={`${p.name} ${p.type}`} sizes="(max-width: 600px) 50vw, 25vw" /></a>
+  <div class="product-info"><a href={`/products/${p.slug}`}><h3>{p.name}</h3></a><p>{p.type}</p><p class="quote-label">Request a quote</p></div>
+  <a class="button outline" href={`/inquiry?product=${p.slug}`}>Inquire now</a>
+</article>

@@ -1,0 +1,40 @@
+---
+import ProductCard from './ProductCard.astro';
+import type { Product } from '../data/products';
+interface Props { products: Product[]; search?: boolean; }
+const {products, search = false} = Astro.props;
+const moods = [...new Set(products.map(p => p.mood))];
+const sizes = [...new Set(products.flatMap(p => p.sizes))];
+---
+<div class="catalog" data-catalog>
+<form class="catalog-tools" role="search"><label class="search-field"><span class="sr-only">Search fragrances</span><input name="q" type="search" placeholder={search ? 'Search by name, collection or mood' : 'Find a fragrance…'} aria-label="Search fragrances" /><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5" /></svg></label><div class="filter-selects"><label><span class="sr-only">Filter by mood</span><select name="mood" aria-label="Filter by mood"><option value="">All moods</option>{moods.map(mood => <option>{mood}</option>)}</select></label><label><span class="sr-only">Filter by size</span><select name="size" aria-label="Filter by size"><option value="">All sizes</option>{sizes.map(size => <option>{size}</option>)}</select></label><label><span class="sr-only">Sort fragrances</span><select name="sort" aria-label="Sort fragrances"><option value="featured">Featured</option><option value="az">Name: A–Z</option><option value="za">Name: Z–A</option></select></label></div><button type="submit" class="button dark catalog-submit">Search</button></form>
+<div class="catalog-summary"><p data-result-count aria-live="polite">{products.length} fragrances</p><button class="text-link" data-clear>Clear filters</button></div>
+<div class="product-grid" data-products>{products.map(product => <ProductCard product={product} />)}</div>
+<div class="empty-state" data-empty hidden><h2>NO SCENTS FOUND.</h2><p>Try another name or explore all moods.</p><button class="button outline" data-clear>Clear filters</button></div>
+</div>
+<script>
+const root = document.querySelector<HTMLElement>('[data-catalog]');
+if (root) {
+ const form = root.querySelector<HTMLFormElement>('form')!;
+ const query = form.elements.namedItem('q') as HTMLInputElement;
+ const mood = form.elements.namedItem('mood') as HTMLSelectElement;
+ const size = form.elements.namedItem('size') as HTMLSelectElement;
+ const sort = form.elements.namedItem('sort') as HTMLSelectElement;
+ const grid = root.querySelector<HTMLElement>('[data-products]')!;
+ const cards = [...grid.querySelectorAll<HTMLElement>('[data-product]')];
+ const load = () => { const params = new URLSearchParams(location.search); query.value = params.get('q') || ''; [mood,size,sort].forEach(field => { const value = params.get(field.name) || (field === sort ? 'featured' : ''); field.value = [...field.options].some(o => o.value === value) ? value : field.options[0].value; }); };
+ const update = (sync = true) => {
+  let count = 0;
+  const ordered = [...cards]; if (sort.value !== 'featured') ordered.sort((a,b) => (a.dataset.name || '').localeCompare(b.dataset.name || '') * (sort.value === 'za' ? -1 : 1));
+  ordered.forEach(card => { const visible = (card.dataset.search || '').includes(query.value.trim().toLowerCase()) && (!mood.value || card.dataset.mood === mood.value) && (!size.value || card.dataset.sizes?.split('|').includes(size.value)); card.hidden = !visible; if (visible) count++; grid.append(card); });
+  root.querySelector('[data-result-count]')!.textContent = `${count} fragrance${count === 1 ? '' : 's'}`;
+  (root.querySelector('[data-empty]') as HTMLElement).hidden = count > 0;
+  if (sync) { const params = new URLSearchParams(); [query,mood,size,sort].forEach(field => { if(field.value && field.value !== 'featured') params.set(field.name,field.value); }); history.replaceState(null,'',`${location.pathname}${params.size ? '?' + params : ''}`); }
+ };
+ load(); update(false);
+ form.addEventListener('submit', event => { event.preventDefault(); update(); });
+ query.addEventListener('input',() => update()); [mood,size,sort].forEach(field => field.addEventListener('change',() => update()));
+ root.querySelectorAll('[data-clear]').forEach(button => button.addEventListener('click',() => { form.reset(); update(); }));
+ window.addEventListener('popstate',() => { load(); update(false); });
+}
+</script>

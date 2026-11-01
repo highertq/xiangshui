@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { products } from '../data/products';
+const slides = [
+ { image: 'hero' as const, title: 'YOUR MINI GETAWAYS\nARE HERE', text: 'A little escape. A new favorite. Discover the scents that take you somewhere.', href: '/collections/fragrance', label: 'Explore fragrances' },
+ { image: 'hero-blue' as const, title: 'A LITTLE TROPICAL.\nA LOT TO LOVE.', text: 'Meet MIAMI NECTAR. Your next fragrance getaway starts here.', href: '/products/miami-nectar', label: 'Discover Miami Nectar' },
+ { image: 'hero-fall' as const, title: 'FIND YOUR\nFALL FRAGRANCE', text: 'New season, new mood. Find a fragrance to make your own.', href: '/collections/all', label: 'Explore the collection' },
+];
+---
+<Base>
+<section class="hero" aria-label="Featured fragrances" aria-roledescription="carousel">{slides.map((slide, i) => <div class="hero-slide" hidden={i !== 0} data-slide><Photo name={slide.image} alt={i === 0 ? 'ISLA SIRENA and MIAMI NECTAR mini fragrances beside a coconut on the beach' : 'Ellis Brooklyn fragrance collection'} eager={i === 0} sizes="100vw" /><div class="hero-copy"><h1 class:list={{'secondary-slide-title': i !== 0}}>{slide.title}</h1><p>{slide.text}</p><a class="button dark" href={slide.href}>{slide.label}</a></div></div>)}</section>
+<div class="slide-controls" aria-label="Choose featured collection">{slides.map((slide,i) => <button data-slide-to={i} aria-label={`Show ${slide.label}`} aria-pressed={i === 0}><span></span></button>)}</div>
+<section class="section bestsellers"><div class="section-heading"><h2>MEET YOUR NEW FAVORITES</h2><a class="text-link" href="/collections/all">Explore all <span>↗</span></a></div><div class="product-rail">{products.slice(0,5).map(product => <ProductCard product={product} />)}</div><div class="rail-actions"><button data-scroll="-1" class="circle-button" aria-label="Previous products">←</button><button data-scroll="1" class="circle-button" aria-label="Next products">→</button></div></section>
+<section class="editorial"><Photo name="vanilla-story" alt="VANILLA RICE and VANILLA MILK in an editorial fragrance collage" /><div class="editorial-right"><div class="editorial-heading"><h2>A VANILLA FOR<br />EVERY MOOD</h2><a class="text-link" href="/collections/vanilla">Explore<br />now ↗</a></div><a href="/collections/vanilla"><Photo name="vanilla-story-right" alt="VANILLA SALT fragrance held by a model" /></a></div></section>
+<section class="section scent-strip"><p class="eyebrow">THE FRAGRANCE WARDROBE</p><h2>FOLLOW YOUR MOOD.</h2><div class="mood-links">{['Vanilla','Gourmand','Tropical','Fruity'].map(mood => <a href={`/collections/all?mood=${mood}`}>{mood}<span>↗</span></a>)}</div></section>
+<section class="editorial"><Photo name="mist-story" alt="MISS AMBER and COCOA BLANCO perfume mist editorial" /><div class="editorial-right"><div class="editorial-heading"><h2>YOUR NEXT<br />MIST-HAVES</h2><a class="text-link" href="/collections/mists">Explore<br />now ↗</a></div><a href="/collections/mists"><Photo name="mist-story-right" alt="Perfume mists arranged with pastries" /></a></div></section>
+<section class="brand-statement"><p class="eyebrow">A WORLD OF FRAGRANCE</p><h2>SCENTS FOR<br />YOUR EVERYDAY STORIES.</h2><p>A new mood. A familiar feeling. A fragrance that feels like you.</p><a href="/about" class="button outline">Discover more</a></section>
+<section class="collection-feature"><div class="feature-products"><div class="section-heading"><h2>A SWEETER MOOD</h2><a href="/products/queens-caramel" class="text-link">Discover ↗</a></div><div class="product-grid two">{[products[1],products[0]].map(product => <ProductCard product={{...product,image:product.detail}} />)}</div></div><a href="/products/queens-caramel"><Photo name="caramel" alt="QUEENS CARAMEL fragrance with a pink satin outfit" /></a></section>
+<section class="section social"><div class="section-heading"><h2>THE WORLD OF ELLIS BROOKLYN</h2><span class="eyebrow">A LITTLE INSPIRATION</span></div><div class="social-grid">{(['social-rice','social-caramel','social-isla','social-model'] as const).map((name,i) => <a href={`/products/${['vanilla-rice','queens-caramel','isla-sirena','vanilla-rice'][i]}`}><Photo name={name} alt={['VANILLA RICE fragrance portrait','QUEENS CARAMEL bottle with caramel','ISLA SIRENA island-inspired campaign','VANILLA RICE editorial portrait'][i]} sizes="(max-width: 600px) 50vw, 25vw" /></a>)}</div></section>
+<script>
+const slides = document.querySelectorAll<HTMLElement>('[data-slide]');
+document.querySelectorAll<HTMLButtonElement>('[data-slide-to]').forEach(button => button.addEventListener('click', () => { const index = Number(button.dataset.slideTo); slides.forEach((slide,i) => slide.hidden = i !== index); document.querySelectorAll('[data-slide-to]').forEach((b,i) => b.setAttribute('aria-pressed',String(i === index))); }));
+document.querySelectorAll<HTMLButtonElement>('[data-scroll]').forEach(button => button.addEventListener('click', () => { const rail = document.querySelector('.product-rail'); rail?.scrollBy({ left: Number(button.dataset.scroll) * (rail.clientWidth * .7), behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' }); }));
+</script>
+</Base>

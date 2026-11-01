@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+import Photo from '../../components/Photo.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { products } from '../../data/products';
+export function getStaticPaths() { return products.map(product => ({ params: {slug: product.slug}, props: {product} })); }
+const { product: p } = Astro.props;
+const gallery = p.image === p.detail ? [p.image] : [p.detail,p.image];
+---
+<Base title={p.name} description={p.description}>
+<div class="breadcrumb section"><a href="/">Home</a><span>/</span><a href={`/collections/${p.category}`}>{p.type}</a><span>/</span><span>{p.name}</span></div>
+<section class="product-detail section"><div class="gallery"><div class="gallery-main">{gallery.map((image,i) => <div data-gallery-panel hidden={i !== 0}><Photo name={image} alt={`${p.name} — ${i === 0 ? 'product view' : 'editorial view'}`} eager={i === 0} /></div>)}</div>{gallery.length > 1 && <div class="gallery-thumbs">{gallery.map((image,i) => <button data-gallery-to={i} aria-label={`View ${i === 0 ? 'product' : 'editorial'} image`} aria-pressed={i === 0}><Photo name={image} alt="" sizes="90px" /></button>)}</div>}</div>
+<div class="product-description"><p class="eyebrow">{p.type}</p><h1>{p.name}</h1><p class="product-tagline">{p.description}</p><div class="quote-note"><strong>Request a quote</strong><span>Pricing and availability by inquiry</span></div><form action="/inquiry" class="product-inquiry"><input type="hidden" name="product" value={p.slug} /><fieldset><legend>SELECT YOUR SIZE</legend><div class="size-options">{p.sizes.map((size,i) => <label><input type="radio" name="size" value={size} checked={i === 0} /><span>{size}</span></label>)}</div></fieldset><button class="button dark" type="submit">Inquire now <span>↗</span></button></form><p class="small-note">Tell us what you’re looking for. No payment is taken on this website.</p><div class="product-accordions"><details open><summary>THE FRAGRANCE</summary><p>{p.name} · {p.type}. Explore the images and choose your preferred format. Ask for full fragrance notes, ingredient information and current availability in your inquiry.</p></details><details><summary>YOUR INQUIRY</summary><p>Your selected fragrance and size will be added to the inquiry form. You can specify quantities, destination and your preferred currency, USD or EUR.</p></details><details><summary>DELIVERY & AVAILABILITY</summary><p>Delivery options, lead times and availability are confirmed individually with your quote. An inquiry does not reserve stock or create an order.</p></details></div></div></section>
+<section class="section"><div class="section-heading"><h2>KEEP EXPLORING</h2><a class="text-link" href="/collections/all">All fragrances ↗</a></div><div class="product-grid">{products.filter(other => other.slug !== p.slug).slice(0,4).map(product => <ProductCard product={product} />)}</div></section>
+<script>
+document.querySelectorAll<HTMLButtonElement>('[data-gallery-to]').forEach(button => button.addEventListener('click',() => { const index = Number(button.dataset.galleryTo); document.querySelectorAll<HTMLElement>('[data-gallery-panel]').forEach((panel,i) => panel.hidden = i !== index); document.querySelectorAll('[data-gallery-to]').forEach((b,i) => b.setAttribute('aria-pressed',String(i === index))); }));
+</script>
+</Base>

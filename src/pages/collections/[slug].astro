@@ -1,0 +1,8 @@
+---
+import Base from '../../layouts/Base.astro';
+import Catalog from '../../components/Catalog.astro';
+import { products, collections, inCollection } from '../../data/products';
+export function getStaticPaths() { return collections.map(collection => ({ params: {slug: collection.slug}, props: {collection} })); }
+const { collection } = Astro.props;
+---
+<Base title={collection.title} description={collection.subtitle}><section class="page-intro"><p class="eyebrow"><a href="/">HOME</a> / THE COLLECTION</p><h1>{collection.title}</h1><p>{collection.subtitle}</p></section><section class="section catalog-section"><nav class="collection-tabs" aria-label="Collections">{collections.map(c => <a href={`/collections/${c.slug}`} aria-current={c.slug === collection.slug ? 'page' : undefined}>{c.slug === 'all' ? 'All' : c.slug === 'fragrance' ? 'Eau de parfum' : c.slug === 'mists' ? 'Perfume mists' : c.slug === 'sets' ? 'Gifts & sets' : 'Vanilla'}</a>)}</nav><Catalog products={products.filter(p => inCollection(p,collection.slug))} /></section></Base>
