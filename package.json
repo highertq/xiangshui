@@ -16,6 +16,7 @@
     "preview:cloudflare": "wrangler dev"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
     "astro": "7.4.4"
   },
   "devDependencies": {

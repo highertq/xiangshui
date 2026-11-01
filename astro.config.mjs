@@ -1,2 +1,9 @@
 import { defineConfig } from 'astro/config';
-export default defineConfig({ output: 'static', devToolbar: { enabled: false } });
+import sitemap from '@astrojs/sitemap';
+
+export default defineConfig({
+  site: 'https://xiangshui.qing.best',
+  output: 'static',
+  devToolbar: { enabled: false },
+  integrations: [sitemap()],
+});

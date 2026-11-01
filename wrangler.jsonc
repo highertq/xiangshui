@@ -1,5 +1,6 @@
 {
   "name": "xiangshui",
   "compatibility_date": "2026-10-30",
-  "assets": { "directory": "./dist", "not_found_handling": "404-page" }
+  "assets": { "directory": "./dist", "not_found_handling": "404-page" },
+  "routes": [{ "pattern": "xiangshui.qing.best", "custom_domain": true }]
 }

@@ -60,8 +60,9 @@ npm run preview
 
 - 提供询盘收件邮箱后选择投递渠道，实现服务端校验和真实邮件投递。
 - 核对正式商品资料、品牌素材使用范围、联系信息和价格策略。
-- 已同步仓库 `highertq/xiangshui` 并部署 Cloudflare Workers；待配置自有域名。
-- `wrangler.jsonc` 为纯静态 Workers Assets 配置；已用 wrangler 4.156.0 实际部署，线上地址 https://xiangshui.yourmantq.workers.dev 。
+- 已同步仓库 `highertq/xiangshui` 并部署 Cloudflare Workers；自定义域 `xiangshui.qing.best` 已绑定并开放索引。
+- `wrangler.jsonc` 为纯静态 Workers Assets 配置，`routes` 声明 `xiangshui.qing.best` 自定义域；`workers_dev` 未启用，workers.dev 预览域不再对外。
+- 生产地址：https://xiangshui.qing.best ，sitemap 由 `@astrojs/sitemap` 在构建时生成。
 - 生产前添加实际域名的 canonical/sitemap/结构化数据并按环境管理 noindex；当前没有虚构正式域名。
 
 见 [实施记录](docs/IMPLEMENTATION.md)。

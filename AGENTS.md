@@ -4,7 +4,7 @@
 
 - 项目：香水外贸独立站，品牌按 Ellis Brooklyn 参考名开发，尽可能沿用原站视觉。
 - 用户已确定：参考本地截图、HTML 和 Ellis Brooklyn；使用最新版稳定 Astro；后续同步 GitHub、部署 Cloudflare。
-- 当前第一版 Astro 静态前台已完成，已推送 GitHub 并部署 Cloudflare Workers（https://xiangshui.yourmantq.workers.dev）；询盘仍为本地草稿，尚未接通发送，未绑定自定义域名。
+- 当前第一版 Astro 静态前台已完成，已推送 GitHub 并部署 Cloudflare Workers，正式地址 https://xiangshui.qing.best （自定义域，已开放索引）。询盘仍为本地草稿，尚未接通发送。
 - 先读 `README.md`、`docs/PROJECT_PLAN.md`、`docs/ARCHITECTURE.md`；涉及视觉时读 `docs/REFERENCE_AUDIT.md`。
 - 已确认事项、建议和待确认事项必须区分；已确认英文、欧美市场、USD/EUR 展示、仅询盘且无管理后台；不再推荐或接入 Shopify。
 - 本文件是代理规范的唯一来源；不要创建另一套内容重复的 `agent.md`。
@@ -74,7 +74,7 @@
 - `.gitignore` 排除依赖、构建产物、密钥、本地参考快照和调试文件；原资料留在本地。
 - 不使用 `git add .` 盲目暂存，先检查状态和 diff；不覆盖用户提交、不强推、不重置用户工作。
 - 后续默认 feature 分支 → PR → 检查与预览 → main 生产发布；最终分支策略按仓库实际设置执行。
-- Cloudflare Workers Builds 负责部署时，GitHub Actions 只做检查，避免两个系统重复部署。
-- 生产、预览分别配置变量、邮件环境；预览站禁止索引。
+- 当前部署方式：本地 `npm run deploy`（check + build + test + wrangler deploy）。Cloudflare Workers Builds 尚未连接 GitHub，因此推送代码不会自动上线；连接后 GitHub Actions 只做检查，避免两个系统重复部署。
+- 生产、预览分别配置变量、邮件环境。当前只对外提供 `xiangshui.qing.best` 生产域，`workers_dev` 已关闭；如另建预览环境，预览域必须禁止索引。
 - 发布后检查首页、商品直达、404、询盘入口和表单；记录 commit、部署版本与回滚方式。
 - 不把“构建通过”“预览上线”“可接收真实询盘”混为一谈。

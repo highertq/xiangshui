@@ -29,3 +29,6 @@ test-results/
 # Browser verification artifacts
 .playwright-cli/
 output/
+
+# Local assistant workspace data
+.workbuddy/
