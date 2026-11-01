@@ -67,3 +67,10 @@ Logo：public/ellis-logo.svg，来自同目录 ellis-logo.svg。
 | src/assets/marshmallows.png | https://cdn.shopify.com/s/files/1/0934/7498/files/FRAME_5.png?v=1787929207&width=1000 |
 | src/assets/marshmallows-silo.jpg | https://cdn.shopify.com/s/files/1/0934/7498/files/EBK_MARSHMALLOWS240_1.jpg?v=1765901172&width=1000 |
 | src/assets/memoir.png | https://cdn.shopify.com/s/files/1/0934/7498/files/MEMOIR_2024.png?v=1739999720&width=1000 |
+
+## 2026-11-01 交互复刻补充
+
+- QUEENS CARAMEL 旅行装、双支套装和焦糖背景：本地 QUEENS-CARAMEL_TRAVEL_SILO_DTC.jpg、QC-DUO-SILO.jpg、EBK_QUEENSCARAMEL_2_1.jpg，并从原站同名 CDN 请求 1000px 版本。
+- PLUM TONIC 悬停白底图：PT_SEPHORA_1.jpg，原首页 HTML 对应第二张图片。
+- 视频五条：原首页 HTML 内 Shopify 视频 URL，具体地址保存在 src/data/videos.json；仅使用原生 video，不加载第三方播放器脚本。视频首次交互才加载，封面保存在 public/video-posters。
+- 媒体标志：本地 PRESS1 系列 PNG，按用户截图补齐展示。

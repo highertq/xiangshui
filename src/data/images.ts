@@ -1,3 +1,10 @@
+import queenEditorial from '../assets/queen-editorial.png';
+import plumWhite from '../assets/plum-white.jpg';
+import extra0 from '../assets/caramel-travel.jpg';
+import extra1 from '../assets/caramel-duo.jpg';
+import extra2 from '../assets/caramel-hover.jpg';
+import extra3 from '../assets/amber.jpg';
+import extra4 from '../assets/plum-duo.jpg';
 import image0 from '../assets/hero.jpg';
 import image1 from '../assets/hero-blue.jpg';
 import image2 from '../assets/hero-fall.jpg';
@@ -26,6 +33,13 @@ import image24 from '../assets/marshmallows.png';
 import image25 from '../assets/marshmallows-silo.jpg';
 import image26 from '../assets/memoir.png';
 export const images = {
+'queen-editorial':queenEditorial,
+'plum-white':plumWhite,
+'caramel-travel': extra0,
+'caramel-duo': extra1,
+'caramel-hover': extra2,
+'amber': extra3,
+'plum-duo': extra4,
   'hero': image0,
   'hero-blue': image1,
   'hero-fall': image2,

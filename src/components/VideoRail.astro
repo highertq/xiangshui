@@ -1,0 +1,21 @@
+---
+import videos from '../data/videos.json';
+import Photo from './Photo.astro';
+import type { ImageKey } from '../data/images';
+---
+<section class="video-section" aria-label="Fragrance videos"><div class="video-rail">{videos.map((item,i)=><article class:list={['video-card',{'is-featured':i===2}]}><div class="video-media"><video poster={item.poster} data-src={item.url} muted loop playsinline preload="none" aria-label={item.title}></video><button class="video-toggle" aria-label={`Play ${item.title}`} aria-pressed="false"><span>▶</span></button><button class="video-sound" aria-label={`Unmute ${item.title}`} aria-pressed="false">♪</button></div><a class="video-product" href={item.slug ? `/products/${item.slug}` : '/inquiry'}><Photo name={item.thumb as ImageKey} alt="" sizes="65px" /><div>{item.title}<small>Request a quote</small></div><span aria-hidden="true">⌃</span></a></article>)}</div><div class="video-arrows"><button aria-label="Previous videos" data-video-scroll="-1">←</button><button aria-label="Next videos" data-video-scroll="1">→</button></div></section>
+<script>
+const cards = document.querySelectorAll<HTMLElement>('.video-card');
+cards.forEach(card=>{
+ const video=card.querySelector('video')!;const toggle=card.querySelector<HTMLButtonElement>('.video-toggle')!;const sound=card.querySelector<HTMLButtonElement>('.video-sound')!;
+ const pause=()=>{video.pause();toggle.setAttribute('aria-pressed','false');toggle.setAttribute('aria-label',`Play ${video.getAttribute('aria-label')}`);card.classList.remove('is-playing');};
+ const play=async()=>{cards.forEach(other=>{if(other!==card)other.querySelector('video')?.pause();});if(!video.src)video.src=video.dataset.src!;try{await video.play();}catch{pause();}};
+ video.addEventListener('play',()=>{card.classList.add('is-playing');toggle.setAttribute('aria-pressed','true');toggle.setAttribute('aria-label',`Pause ${video.getAttribute('aria-label')}`);});video.addEventListener('pause',pause);
+ card.addEventListener('pointerenter',()=>{if(matchMedia('(hover: hover)').matches&&!matchMedia('(prefers-reduced-motion: reduce)').matches)void play();});card.addEventListener('pointerleave',pause);
+ toggle.addEventListener('click',()=>video.paused?void play():pause());
+ sound.addEventListener('click',()=>{video.muted=!video.muted;sound.setAttribute('aria-pressed',String(!video.muted));sound.setAttribute('aria-label',`${video.muted?'Unmute':'Mute'} ${video.getAttribute('aria-label')}`);});
+ new IntersectionObserver(entries=>{if(!entries[0].isIntersecting)pause();}).observe(card);
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
+});
+document.querySelectorAll<HTMLButtonElement>('[data-video-scroll]').forEach(button=>button.addEventListener('click',()=>{const rail=document.querySelector('.video-rail')!;rail.scrollBy({left:rail.clientWidth*.6*Number(button.dataset.videoScroll),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});}));
+</script>
