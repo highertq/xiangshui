@@ -48,7 +48,7 @@ npm test
 npm run preview
 ```
 
-`npm test` 检查构建产物，需先 build。检查范围包含内部链接/资源、英文与 noindex 元数据、第三方脚本和表单目标。GitHub workflow 已准备，但未推送或执行远程 CI。
+`npm test` 检查构建产物，需先 build。检查范围包含内部链接/资源、英文与 noindex 元数据、第三方脚本和表单目标。GitHub workflow 已推送并通过远程 CI（check/build/test）。
 
 ## 当前功能
 
@@ -60,8 +60,8 @@ npm run preview
 
 - 提供询盘收件邮箱后选择投递渠道，实现服务端校验和真实邮件投递。
 - 核对正式商品资料、品牌素材使用范围、联系信息和价格策略。
-- 同步已有仓库 `highertq/xiangshui`；配置 Cloudflare 账户与域名。
-- `wrangler.jsonc` 已准备纯静态资源配置，尚未安装/运行 Wrangler 或验证 Cloudflare 部署。
+- 已同步仓库 `highertq/xiangshui` 并部署 Cloudflare Workers；待配置自有域名。
+- `wrangler.jsonc` 为纯静态 Workers Assets 配置；已用 wrangler 4.156.0 实际部署，线上地址 https://xiangshui.yourmantq.workers.dev 。
 - 生产前添加实际域名的 canonical/sitemap/结构化数据并按环境管理 noindex；当前没有虚构正式域名。
 
 见 [实施记录](docs/IMPLEMENTATION.md)。

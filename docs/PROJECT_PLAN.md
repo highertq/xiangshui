@@ -52,4 +52,4 @@
 
 ## 实施状态（2026-11-01）
 
-M1/M2 已完成首版；M3 完成本地草稿与交互，真实投递待接入。M4 仅准备配置，未推送或部署；M5 未执行。详见 IMPLEMENTATION.md。
+M1/M2 已完成首版；M3 完成本地草稿与交互，真实投递待接入。M4 已推送 GitHub 并部署 Cloudflare Workers（workers.dev 预览域），自定义域名与生产索引策略未配置；M5 未执行。详见 IMPLEMENTATION.md。

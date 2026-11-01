@@ -4,7 +4,7 @@
 
 - 项目：香水外贸独立站，品牌按 Ellis Brooklyn 参考名开发，尽可能沿用原站视觉。
 - 用户已确定：参考本地截图、HTML 和 Ellis Brooklyn；使用最新版稳定 Astro；后续同步 GitHub、部署 Cloudflare。
-- 当前第一版 Astro 静态前台已完成；询盘为本地草稿，尚未接通发送。远程同步和部署尚未执行。
+- 当前第一版 Astro 静态前台已完成，已推送 GitHub 并部署 Cloudflare Workers（https://xiangshui.yourmantq.workers.dev）；询盘仍为本地草稿，尚未接通发送，未绑定自定义域名。
 - 先读 `README.md`、`docs/PROJECT_PLAN.md`、`docs/ARCHITECTURE.md`；涉及视觉时读 `docs/REFERENCE_AUDIT.md`。
 - 已确认事项、建议和待确认事项必须区分；已确认英文、欧美市场、USD/EUR 展示、仅询盘且无管理后台；不再推荐或接入 Shopify。
 - 本文件是代理规范的唯一来源；不要创建另一套内容重复的 `agent.md`。
@@ -69,7 +69,7 @@
 
 ## Git 与部署
 
-- 已有目标仓库：https://github.com/highertq/xiangshui 。后续使用该仓库，不另建仓库。目前尚未配置 origin 或推送。
+- 已有目标仓库：https://github.com/highertq/xiangshui 。origin 已配置，main 已推送（2026-11-01）。不另建仓库。
 
 - `.gitignore` 排除依赖、构建产物、密钥、本地参考快照和调试文件；原资料留在本地。
 - 不使用 `git add .` 盲目暂存，先检查状态和 diff；不覆盖用户提交、不强推、不重置用户工作。
