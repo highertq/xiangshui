@@ -74,7 +74,7 @@
 - `.gitignore` 排除依赖、构建产物、密钥、本地参考快照和调试文件；原资料留在本地。
 - 不使用 `git add .` 盲目暂存，先检查状态和 diff；不覆盖用户提交、不强推、不重置用户工作。
 - 后续默认 feature 分支 → PR → 检查与预览 → main 生产发布；最终分支策略按仓库实际设置执行。
-- 当前部署方式：本地 `npm run deploy`（check + build + test + wrangler deploy）。Cloudflare Workers Builds 尚未连接 GitHub，因此推送代码不会自动上线；连接后 GitHub Actions 只做检查，避免两个系统重复部署。
+- 当前部署方式：Cloudflare Workers Builds 已连接 GitHub，推送 main 自动构建上线（Build command `npm run build`，Deploy command `npx wrangler deploy`，构建机需 `NODE_VERSION=24.20.0`）。GitHub Actions 只做检查，避免两个系统重复部署；本地 `npm run deploy` 仍可用于手动发布。
 - 生产、预览分别配置变量、邮件环境。当前只对外提供 `xiangshui.qing.best` 生产域，`workers_dev` 已关闭；如另建预览环境，预览域必须禁止索引。
 - 发布后检查首页、商品直达、404、询盘入口和表单；记录 commit、部署版本与回滚方式。
 - 不把“构建通过”“预览上线”“可接收真实询盘”混为一谈。
