@@ -23,7 +23,15 @@ const slides = [
 <section class="section social"><div class="section-heading"><h2>THE WORLD OF ELLIS BROOKLYN</h2><span class="eyebrow">A LITTLE INSPIRATION</span></div><div class="social-grid">{(['social-rice','social-caramel','social-isla','social-model'] as const).map((name,i) => <a href={`/products/${['vanilla-rice','queens-caramel','isla-sirena','vanilla-rice'][i]}`}><Photo name={name} alt={['VANILLA RICE fragrance portrait','QUEENS CARAMEL bottle with caramel','ISLA SIRENA island-inspired campaign','VANILLA RICE editorial portrait'][i]} sizes="(max-width: 600px) 50vw, 25vw" /></a>)}</div></section>
 <script>
 const slides = document.querySelectorAll<HTMLElement>('[data-slide]');
-document.querySelectorAll<HTMLButtonElement>('[data-slide-to]').forEach(button => button.addEventListener('click', () => { const index = Number(button.dataset.slideTo); slides.forEach((slide,i) => slide.hidden = i !== index); document.querySelectorAll('[data-slide-to]').forEach((b,i) => b.setAttribute('aria-pressed',String(i === index))); }));
+let activeSlide = 0;
+const hero = document.querySelector<HTMLElement>('.hero')!;
+const showSlide = (index: number) => { activeSlide = index; slides.forEach((slide,i) => slide.hidden = i !== index); document.querySelectorAll('[data-slide-to]').forEach((b,i) => b.setAttribute('aria-pressed',String(i === index))); };
+let nextSlideAt = Date.now() + 5000;
+document.querySelectorAll<HTMLButtonElement>('[data-slide-to]').forEach(button => button.addEventListener('click', () => { showSlide(Number(button.dataset.slideTo)); nextSlideAt = Date.now() + 5000; }));
+window.setInterval(() => {
+ if (document.hidden || hero.matches(':hover, :focus-within') || matchMedia('(prefers-reduced-motion: reduce)').matches) { nextSlideAt = Date.now() + 5000; return; }
+ if (Date.now() >= nextSlideAt) { showSlide((activeSlide + 1) % slides.length); nextSlideAt = Date.now() + 5000; }
+}, 250);
 document.querySelectorAll<HTMLButtonElement>('[data-scroll]').forEach(button => button.addEventListener('click', () => { const rail = document.querySelector('.product-rail'); rail?.scrollBy({ left: Number(button.dataset.scroll) * (rail.clientWidth * .7), behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' }); }));
 </script>
 </Base>

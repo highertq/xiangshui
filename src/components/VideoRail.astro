@@ -17,5 +17,27 @@ cards.forEach(card=>{
  new IntersectionObserver(entries=>{if(!entries[0].isIntersecting)pause();}).observe(card);
  document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
 });
-document.querySelectorAll<HTMLButtonElement>('[data-video-scroll]').forEach(button=>button.addEventListener('click',()=>{const rail=document.querySelector('.video-rail')!;rail.scrollBy({left:rail.clientWidth*.6*Number(button.dataset.videoScroll),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});}));
+const rail = document.querySelector<HTMLElement>('.video-rail')!;
+const arrows = document.querySelectorAll<HTMLButtonElement>('[data-video-scroll]');
+let target = rail.scrollLeft;
+const step = () => cards[1].offsetLeft - cards[0].offsetLeft;
+const update = () => { arrows.forEach(button => { button.disabled = Number(button.dataset.videoScroll) < 0 ? rail.scrollLeft < 2 : rail.scrollLeft >= rail.scrollWidth - rail.clientWidth - 2; }); };
+arrows.forEach(button => button.addEventListener('click', () => {
+ target = Math.max(0, Math.min(rail.scrollWidth - rail.clientWidth, target + step() * Number(button.dataset.videoScroll)));
+ rail.scrollTo({left: target, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'});
+}));
+rail.addEventListener('scroll', update, {passive:true});
+rail.addEventListener('scrollend', () => { target = rail.scrollLeft; });
+let drag: {x:number; left:number; id:number} | null = null;
+let dragged = false;
+rail.addEventListener('pointerdown', event => { if(event.pointerType !== 'mouse' || event.button !== 0) return; drag = {x:event.clientX,left:rail.scrollLeft,id:event.pointerId}; dragged = false; });
+rail.addEventListener('pointermove', event => { if(!drag) return; const delta=event.clientX-drag.x; if(Math.abs(delta)>6 && !dragged) { dragged=true; rail.setPointerCapture(drag.id); rail.classList.add('is-dragging'); cards.forEach(card=>card.querySelector('video')?.pause()); } if(dragged) rail.scrollLeft=drag.left-delta; });
+const endDrag = () => { if(!drag) return; drag=null; rail.classList.remove('is-dragging'); target=rail.scrollLeft; if(dragged) { target=Math.round(target/step())*step(); rail.scrollTo({left:target,behavior:'smooth'}); } };
+rail.addEventListener('pointerup',endDrag);
+rail.addEventListener('pointercancel',endDrag);
+rail.addEventListener('lostpointercapture',endDrag);
+rail.addEventListener('click',event=>{ if(dragged) {event.preventDefault();event.stopImmediatePropagation();dragged=false;} },true);
+rail.addEventListener('dragstart',event=>event.preventDefault());
+new ResizeObserver(()=>{target=rail.scrollLeft;update();}).observe(rail);
+update();
 </script>
