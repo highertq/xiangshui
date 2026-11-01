@@ -56,7 +56,7 @@
 2. 商品文案/容量来自有限参考，正式供货、价格、具体香调/成分需进一步核实。分类中的 mood 是展示标签，不代替正式香调表；当前不发布库存或价格承诺。
 3. 已上线但仍是参考品牌名与参考文案，正式经营前需落实品牌素材使用范围、联系资料与政策。
 4. 仓库已关联 highertq/xiangshui 并推送 main；分支/PR 流程尚未实际走通。
-5. Cloudflare 已部署并绑定自定义域；**Workers Builds 已连接 GitHub，推送 main 自动构建上线**（2026-11-01 实测：推送后 10–15 秒出现新版本，`Source` 为 deployment 而非 Upload）。构建机需保持 `NODE_VERSION=24.20.0`。
+5. Cloudflare 已部署并绑定自定义域；**Workers Builds 未连接 GitHub，推送代码不会自动上线**（2026-11-01 复查：push 后无 CF 构建 check、无新部署记录；`Source: Unknown (deployment)` 不能作为自动部署的证据，手动部署同样如此），需本地执行 `npm run deploy`。
 6. **首页 5 条视频热链 `cdn.shopify.com`**（`src/data/videos.json`），存在版权与稳定性风险；现有测试只检查 script/form 外链，不覆盖 `<video>` 的 `data-src`，需补测试并改用自有或本地素材。
 7. canonical 与 sitemap 已按 `xiangshui.qing.best` 生成，域名若更换需同步改 `astro.config.mjs`、`site.ts`、`robots.txt` 三处；结构化数据尚未添加，性能指标尚未通过 Lighthouse/真实流量测量。
 
